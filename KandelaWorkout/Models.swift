@@ -79,27 +79,37 @@ final class WorkoutTemplate {
 
 @Model
 final class UserProfile {
-    var weight: Double?
     var height: Double?
 
-    init(weight: Double? = nil, height: Double? = nil) {
-        self.weight = weight
+    init(height: Double? = nil) {
         self.height = height
     }
+}
 
-    var bmi: Double? {
-        guard let weight, let height, height > 0 else { return nil }
-        let heightMeters = height / 100
+@Model
+final class WeightEntry {
+    var date: Date
+    var weight: Double
+
+    init(date: Date = .now, weight: Double) {
+        self.date = date
+        self.weight = weight
+    }
+}
+
+enum BMICalculator {
+    static func bmi(weight: Double, heightCm: Double) -> Double? {
+        guard heightCm > 0 else { return nil }
+        let heightMeters = heightCm / 100
         return weight / (heightMeters * heightMeters)
     }
 
-    var bmiCategory: String? {
-        guard let bmi else { return nil }
+    static func category(bmi: Double) -> String {
         switch bmi {
-        case ..<18.5: return "Zayıf"
-        case 18.5..<25: return "Normal"
-        case 25..<30: return "Fazla Kilolu"
-        default: return "Obez"
+        case ..<18.5: "Zayıf"
+        case 18.5..<25: "Normal"
+        case 25..<30: "Fazla Kilolu"
+        default: "Obez"
         }
     }
 }

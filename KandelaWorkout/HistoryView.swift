@@ -1,5 +1,15 @@
 import SwiftUI
 import SwiftData
+import Charts
+
+private struct PersonalRecord: Identifiable {
+    let id = UUID()
+    let exerciseName: String
+    let region: MuscleGroup?
+    let weight: Double
+    let reps: Int
+    let date: Date
+}
 
 struct HistoryView: View {
     @Environment(\.modelContext) private var modelContext
@@ -17,6 +27,20 @@ struct HistoryView: View {
                             .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)
                             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 10, trailing: 16))
+
+                        if sessions.count >= 2 {
+                            volumeChartCard
+                                .listRowSeparator(.hidden)
+                                .listRowBackground(Color.clear)
+                                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 10, trailing: 16))
+                        }
+
+                        if !personalRecords.isEmpty {
+                            recordsCard
+                                .listRowSeparator(.hidden)
+                                .listRowBackground(Color.clear)
+                                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 10, trailing: 16))
+                        }
 
                         ForEach(sessions) { session in
                             Button {
@@ -93,6 +117,139 @@ struct HistoryView: View {
 
     private var totalVolume: Double {
         sessions.reduce(0) { $0 + $1.totalVolume }
+    }
+
+    // MARK: - Volume chart
+
+    private var volumeChartCard: some View {
+        let points = Array(sessions.prefix(12).reversed())
+
+        return VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Image(systemName: "chart.line.uptrend.xyaxis")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(Color.accentColor)
+                Text("Hacim Trendi")
+                    .font(.subheadline.weight(.bold))
+                Spacer(minLength: 0)
+                Text("Son \(points.count) antrenman")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Chart(points) { session in
+                AreaMark(
+                    x: .value("Tarih", session.date),
+                    y: .value("Hacim", session.totalVolume)
+                )
+                .foregroundStyle(Color.accentColor.opacity(0.12).gradient)
+                .interpolationMethod(.catmullRom)
+
+                LineMark(
+                    x: .value("Tarih", session.date),
+                    y: .value("Hacim", session.totalVolume)
+                )
+                .foregroundStyle(Color.accentColor.gradient)
+                .interpolationMethod(.catmullRom)
+                .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
+
+                PointMark(
+                    x: .value("Tarih", session.date),
+                    y: .value("Hacim", session.totalVolume)
+                )
+                .foregroundStyle(Color.accentColor)
+            }
+            .chartXAxis {
+                AxisMarks(values: .automatic(desiredCount: 3)) { _ in
+                    AxisGridLine()
+                    AxisValueLabel(format: .dateTime.day().month(.abbreviated))
+                }
+            }
+            .chartYAxis {
+                AxisMarks(position: .leading)
+            }
+            .frame(height: 150)
+        }
+        .cardStyle(padding: 16)
+    }
+
+    // MARK: - Personal records
+
+    private var personalRecords: [PersonalRecord] {
+        var best: [String: PersonalRecord] = [:]
+
+        for session in sessions {
+            for exercise in session.exercises where exercise.measurement == .repsWeight {
+                for set in exercise.sets where set.weight > 0 {
+                    if best[exercise.name] == nil || set.weight > best[exercise.name]!.weight {
+                        best[exercise.name] = PersonalRecord(
+                            exerciseName: exercise.name,
+                            region: exercise.region,
+                            weight: set.weight,
+                            reps: set.reps,
+                            date: session.date
+                        )
+                    }
+                }
+            }
+        }
+
+        return best.values.sorted { $0.weight > $1.weight }
+    }
+
+    private var recordsCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 8) {
+                Image(systemName: "trophy.fill")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(.yellow)
+                Text("Kişisel Rekorların")
+                    .font(.subheadline.weight(.bold))
+                Spacer(minLength: 0)
+                Text("\(personalRecords.count)")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(.secondary)
+            }
+
+            VStack(spacing: 8) {
+                ForEach(personalRecords) { record in
+                    recordRow(record)
+                }
+            }
+        }
+        .cardStyle()
+    }
+
+    private func recordRow(_ record: PersonalRecord) -> some View {
+        HStack(spacing: 12) {
+            RegionBadge(region: record.region, size: 36)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(record.exerciseName)
+                    .font(.subheadline.weight(.semibold))
+                    .lineLimit(1)
+                Text(record.date.trDayMonth)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer(minLength: 8)
+
+            VStack(alignment: .trailing, spacing: 1) {
+                Text("\(formattedWeight(record.weight)) kg")
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(record.region?.tint ?? .accentColor)
+                Text("\(record.reps) tekrar")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(Color(.systemGroupedBackground))
+        )
     }
 
     // MARK: - Row

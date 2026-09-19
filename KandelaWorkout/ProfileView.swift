@@ -1,12 +1,14 @@
 import SwiftUI
 import SwiftData
+import Charts
 
 struct ProfileView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var profiles: [UserProfile]
+    @Query(sort: \WeightEntry.date, order: .reverse) private var weightEntries: [WeightEntry]
 
     @State private var profile: UserProfile?
-    @State private var weightText = ""
+    @State private var weightInput = ""
     @State private var heightText = ""
 
     var body: some View {
@@ -14,10 +16,11 @@ struct ProfileView: View {
             ScrollView {
                 VStack(spacing: 18) {
                     introCard
-                    measurementsCard
+                    weightCard
+                    heightCard
 
-                    if let bmi = profile?.bmi {
-                        bmiCard(bmi: bmi, category: profile?.bmiCategory ?? "")
+                    if let bmi = currentBMI {
+                        bmiCard(bmi: bmi, category: BMICalculator.category(bmi: bmi))
                     }
                 }
                 .padding(16)
@@ -55,7 +58,7 @@ struct ProfileView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Profilin")
                     .font(.headline)
-                Text("Kilo ve boyunu gir, vücut kitle indeksini otomatik görelim.")
+                Text("Kilonu düzenli gir, ilerlemeni grafikte takip et.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -65,43 +68,160 @@ struct ProfileView: View {
         .cardStyle()
     }
 
-    // MARK: - Measurements
+    // MARK: - Weight tracking
 
-    private var measurementsCard: some View {
+    private var weightCard: some View {
         VStack(alignment: .leading, spacing: 14) {
-            StepHeader(number: 1, title: "Kilo ve boy")
+            StepHeader(number: 1, title: "Kilonu takip et")
 
-            HStack(spacing: 12) {
-                fieldBlock(title: "Kilo", suffix: "kg", text: $weightText, keyboard: .decimalPad) { newValue in
-                    ensureProfile().weight = Double(newValue.replacingOccurrences(of: ",", with: "."))
-                }
+            if let latest = weightEntries.first {
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    Text(formattedWeight(latest.weight))
+                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                    Text("kg")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
 
-                fieldBlock(title: "Boy", suffix: "cm", text: $heightText, keyboard: .numberPad) { newValue in
-                    ensureProfile().height = Double(newValue)
+                    if let delta = weightDelta, delta != 0 {
+                        MetricPill(
+                            icon: delta > 0 ? "arrow.up.right" : "arrow.down.right",
+                            text: "\(delta > 0 ? "+" : "")\(formattedWeight(delta)) kg",
+                            tint: delta > 0 ? .orange : .green
+                        )
+                    }
+
+                    Spacer(minLength: 0)
+
+                    Text(latest.date.trDayMonth)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
+            }
+
+            HStack(spacing: 10) {
+                TextField("Bugünkü kilon", text: $weightInput)
+                    .keyboardType(.decimalPad)
+                    .font(.subheadline.weight(.medium))
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 11)
+                    .background(
+                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            .fill(Color(.tertiarySystemFill))
+                    )
+
+                Button {
+                    logWeight()
+                } label: {
+                    Text("Kaydet")
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 12)
+                        .background(
+                            Capsule().fill(
+                                canLogWeight
+                                    ? AnyShapeStyle(Color.accentColor.gradient)
+                                    : AnyShapeStyle(Color.secondary.opacity(0.3))
+                            )
+                        )
+                }
+                .buttonStyle(.plain)
+                .disabled(!canLogWeight)
+            }
+
+            if weightEntries.count >= 2 {
+                weightChart
+            } else {
+                Text("Trend grafiği için en az 2 kilo kaydı gerekiyor.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
         .cardStyle()
     }
 
-    private func fieldBlock(
-        title: String,
-        suffix: String,
-        text: Binding<String>,
-        keyboard: UIKeyboardType,
-        onChange: @escaping (String) -> Void
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
+    private var weightChart: some View {
+        let points = Array(weightEntries.reversed())
+        let values = points.map(\.weight)
+        let minValue = (values.min() ?? 0) - 2
+        let maxValue = (values.max() ?? 0) + 2
+
+        return Chart(points) { entry in
+            AreaMark(
+                x: .value("Tarih", entry.date),
+                y: .value("Kilo", entry.weight)
+            )
+            .foregroundStyle(Color.accentColor.opacity(0.12).gradient)
+            .interpolationMethod(.catmullRom)
+
+            LineMark(
+                x: .value("Tarih", entry.date),
+                y: .value("Kilo", entry.weight)
+            )
+            .foregroundStyle(Color.accentColor.gradient)
+            .interpolationMethod(.catmullRom)
+            .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
+
+            PointMark(
+                x: .value("Tarih", entry.date),
+                y: .value("Kilo", entry.weight)
+            )
+            .foregroundStyle(Color.accentColor)
+        }
+        .chartYScale(domain: minValue...maxValue)
+        .chartXAxis {
+            AxisMarks(values: .automatic(desiredCount: 4)) { _ in
+                AxisGridLine()
+                AxisValueLabel(format: .dateTime.day().month(.abbreviated))
+            }
+        }
+        .chartYAxis {
+            AxisMarks(position: .leading)
+        }
+        .frame(height: 160)
+        .padding(.top, 4)
+    }
+
+    private var weightDelta: Double? {
+        guard weightEntries.count >= 2 else { return nil }
+        return weightEntries[0].weight - weightEntries[1].weight
+    }
+
+    private var canLogWeight: Bool {
+        Double(weightInput.replacingOccurrences(of: ",", with: ".")) != nil
+    }
+
+    private var currentBMI: Double? {
+        guard let weight = weightEntries.first?.weight, let height = profile?.height else { return nil }
+        return BMICalculator.bmi(weight: weight, heightCm: height)
+    }
+
+    private func logWeight() {
+        guard let value = Double(weightInput.replacingOccurrences(of: ",", with: ".")) else { return }
+
+        if let todayEntry = weightEntries.first(where: { Calendar.current.isDateInToday($0.date) }) {
+            todayEntry.weight = value
+        } else {
+            modelContext.insert(WeightEntry(weight: value))
+        }
+
+        weightInput = ""
+        hideKeyboard()
+    }
+
+    // MARK: - Height
+
+    private var heightCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            StepHeader(number: 2, title: "Boyun")
 
             HStack(spacing: 6) {
-                TextField("0", text: text)
-                    .keyboardType(keyboard)
+                TextField("0", text: $heightText)
+                    .keyboardType(.numberPad)
                     .font(.title3.weight(.bold))
                     .monospacedDigit()
-                Text(suffix)
+                Text("cm")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.secondary)
             }
@@ -111,11 +231,11 @@ struct ProfileView: View {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .fill(Color(.tertiarySystemFill))
             )
+            .onChange(of: heightText) { _, newValue in
+                ensureProfile().height = Double(newValue)
+            }
         }
-        .frame(maxWidth: .infinity)
-        .onChange(of: text.wrappedValue) { _, newValue in
-            onChange(newValue)
-        }
+        .cardStyle()
     }
 
     // MARK: - BMI
@@ -143,9 +263,7 @@ struct ProfileView: View {
 
     @discardableResult
     private func ensureProfile() -> UserProfile {
-        if let profile {
-            return profile
-        }
+        if let profile { return profile }
         if let existing = profiles.first {
             profile = existing
             return existing
@@ -158,7 +276,6 @@ struct ProfileView: View {
 
     private func loadInitialValues() {
         let current = ensureProfile()
-        weightText = current.weight.map { formattedWeight($0) } ?? ""
         heightText = current.height.map { String(Int($0)) } ?? ""
     }
 
@@ -169,5 +286,5 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView()
-        .modelContainer(for: [UserProfile.self], inMemory: true)
+        .modelContainer(for: [UserProfile.self, WeightEntry.self], inMemory: true)
 }

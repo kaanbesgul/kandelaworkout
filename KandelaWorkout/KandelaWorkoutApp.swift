@@ -16,6 +16,7 @@ struct KandelaWorkoutApp: App {
             SetEntry.self,
             WorkoutTemplate.self,
             UserProfile.self,
+            WeightEntry.self,
         ])
     }
 }
