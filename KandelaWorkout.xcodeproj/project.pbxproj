@@ -1,0 +1,385 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		12F6E594524EE301E943A250 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40DF4E468FD4F623E4BE3F6 /* HistoryView.swift */; };
+		23D5C0F25773AA5557E7864D /* WorkoutEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8780ED537EB47F014F62F648 /* WorkoutEntryView.swift */; };
+		3451F163EED362882F53B846 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29F743880F683E8F0469B85 /* Models.swift */; };
+		64FCBBC14019727FCE48C35E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2EF06D1BCD704BB11287845 /* Assets.xcassets */; };
+		8C325B30365340A3955E99E6 /* KandelaWorkoutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D21C69F900D2C181C376DEA /* KandelaWorkoutApp.swift */; };
+		9136A4F4EBC6655F0D928515 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BEF2651F14F67F923FCA623 /* ContentView.swift */; };
+		E5E89FB6B330C2DF86029F39 /* ExerciseLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4DC4E79993F68CD90CB0F1 /* ExerciseLibrary.swift */; };
+		A44FE035D472A48060C595E4 /* UIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E9804914660244ADE68EE7 /* UIComponents.swift */; };
+		47772BD5AEA150F3478280D2 /* WorkoutProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE68A09DE7720CF14452A22 /* WorkoutProgram.swift */; };
+		010AF50EEE0ADB98E7A74692 /* AIAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAD098738AA147272CD4AFE /* AIAnalysisView.swift */; };
+		8768294CB152C8FA8E96EA7D /* LocalAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B089CC8B74361D9BD6D2644 /* LocalAnalysis.swift */; };
+		841A9DF82CBB59D5133D75AB /* TemplatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A5DA229E502769693E4E06 /* TemplatesView.swift */; };
+		B6E807FC3C1F479514C24C1F /* RestTimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7A74B3329A9CBF92A64124 /* RestTimerService.swift */; };
+		2C7CCDEE4248A28F9CE0B3B6 /* RestTimerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17DB06E0D43444657965ADD /* RestTimerSheet.swift */; };
+		5CA9C6DACA13B65F52F6386B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF7DCFE9DD8301FEC36C07 /* ProfileView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2BEF2651F14F67F923FCA623 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		6E0A903FB3FEEA3AC0E89984 /* KandelaWorkout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KandelaWorkout.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8780ED537EB47F014F62F648 /* WorkoutEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutEntryView.swift; sourceTree = "<group>"; };
+		8D21C69F900D2C181C376DEA /* KandelaWorkoutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KandelaWorkoutApp.swift; sourceTree = "<group>"; };
+		A40DF4E468FD4F623E4BE3F6 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		B2EF06D1BCD704BB11287845 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E29F743880F683E8F0469B85 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		1E4DC4E79993F68CD90CB0F1 /* ExerciseLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibrary.swift; sourceTree = "<group>"; };
+		D0E9804914660244ADE68EE7 /* UIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIComponents.swift; sourceTree = "<group>"; };
+		7DE68A09DE7720CF14452A22 /* WorkoutProgram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutProgram.swift; sourceTree = "<group>"; };
+		EBAD098738AA147272CD4AFE /* AIAnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIAnalysisView.swift; sourceTree = "<group>"; };
+		6B089CC8B74361D9BD6D2644 /* LocalAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAnalysis.swift; sourceTree = "<group>"; };
+		62A5DA229E502769693E4E06 /* TemplatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplatesView.swift; sourceTree = "<group>"; };
+		1F7A74B3329A9CBF92A64124 /* RestTimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerService.swift; sourceTree = "<group>"; };
+		E17DB06E0D43444657965ADD /* RestTimerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerSheet.swift; sourceTree = "<group>"; };
+		D6AF7DCFE9DD8301FEC36C07 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6C00869CEB52545D4ED4DA34 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0AA0F51748C6972DFB09E249 /* KandelaWorkout */ = {
+			isa = PBXGroup;
+			children = (
+				8D21C69F900D2C181C376DEA /* KandelaWorkoutApp.swift */,
+				2BEF2651F14F67F923FCA623 /* ContentView.swift */,
+				E29F743880F683E8F0469B85 /* Models.swift */,
+				1E4DC4E79993F68CD90CB0F1 /* ExerciseLibrary.swift */,
+				D0E9804914660244ADE68EE7 /* UIComponents.swift */,
+				7DE68A09DE7720CF14452A22 /* WorkoutProgram.swift */,
+				8780ED537EB47F014F62F648 /* WorkoutEntryView.swift */,
+				A40DF4E468FD4F623E4BE3F6 /* HistoryView.swift */,
+				EBAD098738AA147272CD4AFE /* AIAnalysisView.swift */,
+				6B089CC8B74361D9BD6D2644 /* LocalAnalysis.swift */,
+				62A5DA229E502769693E4E06 /* TemplatesView.swift */,
+				1F7A74B3329A9CBF92A64124 /* RestTimerService.swift */,
+				E17DB06E0D43444657965ADD /* RestTimerSheet.swift */,
+				D6AF7DCFE9DD8301FEC36C07 /* ProfileView.swift */,
+				B2EF06D1BCD704BB11287845 /* Assets.xcassets */,
+			);
+			path = KandelaWorkout;
+			sourceTree = "<group>";
+		};
+		62ED7F3CD900F34F5984CE0A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E0A903FB3FEEA3AC0E89984 /* KandelaWorkout.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D7170DBC0CF0B974A7F31DD7 = {
+			isa = PBXGroup;
+			children = (
+				0AA0F51748C6972DFB09E249 /* KandelaWorkout */,
+				62ED7F3CD900F34F5984CE0A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1C5822585FDD5359539B8488 /* KandelaWorkout */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5078F7743DCC39D985EACD2D /* Build configuration list for PBXNativeTarget "KandelaWorkout" */;
+			buildPhases = (
+				6E47DEF5CF2BB4CCBDA7BA5C /* Sources */,
+				6C00869CEB52545D4ED4DA34 /* Frameworks */,
+				555D08F4ACC2DCF09E303AE8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KandelaWorkout;
+			productName = KandelaWorkout;
+			productReference = 6E0A903FB3FEEA3AC0E89984 /* KandelaWorkout.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6E26A2A1CDA6C1FFCE82C938 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					1C5822585FDD5359539B8488 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+				};
+			};
+			buildConfigurationList = D73B5171AFE5497764D7C9B1 /* Build configuration list for PBXProject "KandelaWorkout" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D7170DBC0CF0B974A7F31DD7;
+			productRefGroup = 62ED7F3CD900F34F5984CE0A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1C5822585FDD5359539B8488 /* KandelaWorkout */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		555D08F4ACC2DCF09E303AE8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				64FCBBC14019727FCE48C35E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6E47DEF5CF2BB4CCBDA7BA5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C325B30365340A3955E99E6 /* KandelaWorkoutApp.swift in Sources */,
+				9136A4F4EBC6655F0D928515 /* ContentView.swift in Sources */,
+				3451F163EED362882F53B846 /* Models.swift in Sources */,
+				E5E89FB6B330C2DF86029F39 /* ExerciseLibrary.swift in Sources */,
+				A44FE035D472A48060C595E4 /* UIComponents.swift in Sources */,
+				47772BD5AEA150F3478280D2 /* WorkoutProgram.swift in Sources */,
+				23D5C0F25773AA5557E7864D /* WorkoutEntryView.swift in Sources */,
+				12F6E594524EE301E943A250 /* HistoryView.swift in Sources */,
+				010AF50EEE0ADB98E7A74692 /* AIAnalysisView.swift in Sources */,
+				8768294CB152C8FA8E96EA7D /* LocalAnalysis.swift in Sources */,
+				841A9DF82CBB59D5133D75AB /* TemplatesView.swift in Sources */,
+				B6E807FC3C1F479514C24C1F /* RestTimerService.swift in Sources */,
+				2C7CCDEE4248A28F9CE0B3B6 /* RestTimerSheet.swift in Sources */,
+				5CA9C6DACA13B65F52F6386B /* ProfileView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1EE2D8A450E6086F603DC569 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = G9T43SK5X6;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kandela.workout;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3FA2D46D1304EE3D60B60080 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		77C8E5F568A40DC36FC1A340 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = G9T43SK5X6;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kandela.workout;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BBAE9D85ED996CC0B9C5C05A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5078F7743DCC39D985EACD2D /* Build configuration list for PBXNativeTarget "KandelaWorkout" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77C8E5F568A40DC36FC1A340 /* Debug */,
+				1EE2D8A450E6086F603DC569 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D73B5171AFE5497764D7C9B1 /* Build configuration list for PBXProject "KandelaWorkout" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BBAE9D85ED996CC0B9C5C05A /* Debug */,
+				3FA2D46D1304EE3D60B60080 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6E26A2A1CDA6C1FFCE82C938 /* Project object */;
+}
