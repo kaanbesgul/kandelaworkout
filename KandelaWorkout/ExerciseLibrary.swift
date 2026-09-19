@@ -70,6 +70,7 @@ enum ExerciseLibrary {
             "Chest Press Makinesi",
             "Diamond Push-Up (Elmas Şınav)",
             "Dips (Göğüs Dip)",
+            "Ağırlıklı Dips",
             "Dumbbell Bench Press",
             "Eğimli Bench Press",
             "Eğimli Dumbbell Press",
@@ -85,6 +86,7 @@ enum ExerciseLibrary {
         ],
         .sirt: [
             "Barfiks",
+            "Ağırlıklı Barfiks",
             "Chin-Up (Ters Barfiks)",
             "Close Grip Lat Pulldown",
             "Deadlift",

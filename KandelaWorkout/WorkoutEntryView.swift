@@ -158,27 +158,23 @@ struct WorkoutEntryView: View {
     }
 
     private func templateChip(_ template: WorkoutTemplate) -> some View {
-        let tint = template.program?.tint ?? .accentColor
-
-        return Button {
+        Button {
             applyTemplate(template)
         } label: {
             HStack(spacing: 6) {
                 Image(systemName: template.program?.icon ?? "list.bullet.clipboard.fill")
                     .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(.secondary)
                 Text(template.name)
                     .font(.subheadline.weight(.semibold))
                 Text("\(template.exerciseNames.count)")
                     .font(.caption2.weight(.bold))
-                    .foregroundStyle(.white)
-                    .frame(width: 16, height: 16)
-                    .background(Circle().fill(tint))
+                    .foregroundStyle(.secondary)
             }
             .foregroundStyle(.primary)
             .padding(.horizontal, 13)
             .padding(.vertical, 9)
             .background(Capsule().fill(Color(.secondarySystemGroupedBackground)))
-            .overlay(Capsule().strokeBorder(tint.opacity(0.35), lineWidth: 1.2))
         }
         .buttonStyle(.plain)
         .contextMenu {
@@ -248,8 +244,8 @@ struct WorkoutEntryView: View {
             .background {
                 if isSelected {
                     Capsule()
-                        .fill(program.tint.gradient)
-                        .shadow(color: program.tint.opacity(0.45), radius: 8, x: 0, y: 4)
+                        .fill(Color.accentColor.gradient)
+                        .shadow(color: Color.accentColor.opacity(0.45), radius: 8, x: 0, y: 4)
                 } else {
                     Capsule()
                         .fill(Color(.tertiarySystemFill))
@@ -265,23 +261,54 @@ struct WorkoutEntryView: View {
     private func exerciseCard(exercise: Binding<DraftExercise>) -> some View {
         let draft = exercise.wrappedValue
         let region = draft.region
-        let tint = region?.tint ?? .accentColor
 
         VStack(alignment: .leading, spacing: 14) {
-            HStack(spacing: 13) {
-                RegionBadge(region: region)
+            HStack(spacing: 10) {
+                Menu {
+                    if let program = selectedProgram {
+                        Section("Önerilen · \(program.rawValue)") {
+                            ForEach(ExerciseLibrary.recommendedExercises(for: program), id: \.self) { name in
+                                Button(name) {
+                                    exercise.wrappedValue.exerciseName = name
+                                }
+                            }
+                        }
+                    }
 
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(draft.exerciseName ?? "Hareket seç")
-                        .font(.headline)
-                        .foregroundStyle(draft.exerciseName == nil ? .secondary : .primary)
-                        .lineLimit(1)
-                    Text(subtitle(for: draft))
-                        .font(.caption.weight(.medium))
-                        .foregroundStyle(.secondary)
+                    Section("Tüm Hareketler") {
+                        ForEach(ExerciseLibrary.sortedRegions) { libraryRegion in
+                            Menu(libraryRegion.rawValue) {
+                                ForEach(ExerciseLibrary.sortedExercises(for: libraryRegion), id: \.self) { name in
+                                    Button(name) {
+                                        exercise.wrappedValue.exerciseName = name
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 12) {
+                        RegionBadge(region: region, size: 40)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(draft.exerciseName ?? "Hareket seç")
+                                .font(.headline)
+                                .foregroundStyle(draft.exerciseName == nil ? .secondary : .primary)
+                                .lineLimit(1)
+                            Text(subtitle(for: draft))
+                                .font(.caption.weight(.medium))
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Spacer(minLength: 0)
+
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundStyle(.secondary)
+                    }
+                    .contentShape(Rectangle())
                 }
-
-                Spacer(minLength: 0)
+                .buttonStyle(.plain)
 
                 if exercises.count > 1 {
                     Button {
@@ -299,12 +326,10 @@ struct WorkoutEntryView: View {
                 }
             }
 
-            exercisePicker(exercise: exercise, tint: tint)
-
             VStack(spacing: 8) {
                 ForEach(exercise.sets) { $set in
                     let index = (exercise.wrappedValue.sets.firstIndex { $0.id == set.id } ?? 0) + 1
-                    setRow(index: index, set: $set, measurement: draft.measurement, tint: tint) {
+                    setRow(index: index, set: $set, measurement: draft.measurement) {
                         withAnimation(.snappy) {
                             exercise.wrappedValue.sets.removeAll { $0.id == set.id }
                         }
@@ -319,10 +344,10 @@ struct WorkoutEntryView: View {
             } label: {
                 Label("Set Ekle", systemImage: "plus")
                     .font(.footnote.weight(.bold))
-                    .foregroundStyle(tint)
+                    .foregroundStyle(Color.accentColor)
                     .padding(.horizontal, 13)
                     .padding(.vertical, 8)
-                    .background(Capsule().fill(tint.opacity(0.13)))
+                    .background(Capsule().fill(Color.accentColor.opacity(0.1)))
             }
             .buttonStyle(.plain)
         }
@@ -334,54 +359,20 @@ struct WorkoutEntryView: View {
         return "\(region.rawValue) · \(draft.sets.count) set"
     }
 
-    private func exercisePicker(exercise: Binding<DraftExercise>, tint: Color) -> some View {
-        Menu {
-            if let program = selectedProgram {
-                Section("Önerilen · \(program.rawValue)") {
-                    ForEach(ExerciseLibrary.recommendedExercises(for: program), id: \.self) { name in
-                        Button(name) {
-                            exercise.wrappedValue.exerciseName = name
-                        }
-                    }
-                }
-            }
-
-            Section("Tüm Hareketler") {
-                ForEach(ExerciseLibrary.sortedRegions) { libraryRegion in
-                    Menu(libraryRegion.rawValue) {
-                        ForEach(ExerciseLibrary.sortedExercises(for: libraryRegion), id: \.self) { name in
-                            Button(name) {
-                                exercise.wrappedValue.exerciseName = name
-                            }
-                        }
-                    }
-                }
-            }
-        } label: {
-            PickerChip(
-                title: exercise.wrappedValue.exerciseName ?? "Hareket Seç",
-                isPlaceholder: exercise.wrappedValue.exerciseName == nil,
-                tint: tint
-            )
-        }
-        .tint(tint)
-    }
-
     // MARK: - Set row
 
     private func setRow(
         index: Int,
         set: Binding<DraftSet>,
         measurement: ExerciseMeasurement,
-        tint: Color,
         onDelete: @escaping () -> Void
     ) -> some View {
         HStack(spacing: 10) {
             Text("\(index)")
                 .font(.footnote.weight(.bold))
-                .foregroundStyle(.white)
+                .foregroundStyle(.secondary)
                 .frame(width: 28, height: 28)
-                .background(Circle().fill(tint.gradient))
+                .background(Circle().fill(Color(.tertiarySystemFill)))
 
             switch measurement {
             case .repsWeight:

@@ -63,12 +63,10 @@ struct StepHeader: View {
     let title: String
 
     var body: some View {
-        HStack(spacing: 8) {
-            Text("\(number)")
-                .font(.caption2.weight(.heavy))
-                .foregroundStyle(.white)
-                .frame(width: 20, height: 20)
-                .background(Circle().fill(Color.accentColor.gradient))
+        HStack(spacing: 6) {
+            Text("\(number).")
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(.tertiary)
             Text(title)
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
@@ -109,13 +107,11 @@ struct MetricPill: View {
         HStack(spacing: 4) {
             Image(systemName: icon)
                 .font(.system(size: 9, weight: .bold))
+                .foregroundStyle(tint == .secondary ? AnyShapeStyle(.tertiary) : AnyShapeStyle(tint))
             Text(text)
-                .font(.caption2.weight(.bold))
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(.secondary)
         }
-        .foregroundStyle(tint)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(Capsule().fill(tint.opacity(0.13)))
     }
 }
 
@@ -134,7 +130,7 @@ struct ProgramTag: View {
         .foregroundStyle(.white)
         .padding(.horizontal, 9)
         .padding(.vertical, 4)
-        .background(Capsule().fill(program.tint.gradient))
+        .background(Capsule().fill(Color.accentColor.gradient))
     }
 }
 
@@ -143,25 +139,22 @@ struct ProgramTag: View {
 struct PickerChip: View {
     let title: String
     let isPlaceholder: Bool
-    var tint: Color = .accentColor
 
     var body: some View {
         HStack(spacing: 8) {
             Text(title)
                 .lineLimit(1)
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(isPlaceholder ? Color.secondary : tint)
+                .foregroundStyle(isPlaceholder ? Color.secondary : Color.primary)
 
             Spacer(minLength: 4)
 
             Image(systemName: "chevron.up.chevron.down")
                 .font(.system(size: 10, weight: .bold))
-                .foregroundStyle(tint)
-                .frame(width: 24, height: 24)
-                .background(Circle().fill(tint.opacity(0.13)))
+                .foregroundStyle(.secondary)
         }
         .padding(.leading, 14)
-        .padding(.trailing, 7)
+        .padding(.trailing, 12)
         .padding(.vertical, 7)
         .background(
             RoundedRectangle(cornerRadius: 15, style: .continuous)

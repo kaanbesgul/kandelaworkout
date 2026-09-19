@@ -2,15 +2,6 @@ import SwiftUI
 import SwiftData
 import Charts
 
-private struct PersonalRecord: Identifiable {
-    let id = UUID()
-    let exerciseName: String
-    let region: MuscleGroup?
-    let weight: Double
-    let reps: Int
-    let date: Date
-}
-
 struct HistoryView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \WorkoutSession.date, order: .reverse) private var sessions: [WorkoutSession]
@@ -30,13 +21,6 @@ struct HistoryView: View {
 
                         if sessions.count >= 2 {
                             volumeChartCard
-                                .listRowSeparator(.hidden)
-                                .listRowBackground(Color.clear)
-                                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 10, trailing: 16))
-                        }
-
-                        if !personalRecords.isEmpty {
-                            recordsCard
                                 .listRowSeparator(.hidden)
                                 .listRowBackground(Color.clear)
                                 .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 10, trailing: 16))
@@ -173,85 +157,6 @@ struct HistoryView: View {
         .cardStyle(padding: 16)
     }
 
-    // MARK: - Personal records
-
-    private var personalRecords: [PersonalRecord] {
-        var best: [String: PersonalRecord] = [:]
-
-        for session in sessions {
-            for exercise in session.exercises where exercise.measurement == .repsWeight {
-                for set in exercise.sets where set.weight > 0 {
-                    if best[exercise.name] == nil || set.weight > best[exercise.name]!.weight {
-                        best[exercise.name] = PersonalRecord(
-                            exerciseName: exercise.name,
-                            region: exercise.region,
-                            weight: set.weight,
-                            reps: set.reps,
-                            date: session.date
-                        )
-                    }
-                }
-            }
-        }
-
-        return best.values.sorted { $0.weight > $1.weight }
-    }
-
-    private var recordsCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(spacing: 8) {
-                Image(systemName: "trophy.fill")
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundStyle(.yellow)
-                Text("Kişisel Rekorların")
-                    .font(.subheadline.weight(.bold))
-                Spacer(minLength: 0)
-                Text("\(personalRecords.count)")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(.secondary)
-            }
-
-            VStack(spacing: 8) {
-                ForEach(personalRecords) { record in
-                    recordRow(record)
-                }
-            }
-        }
-        .cardStyle()
-    }
-
-    private func recordRow(_ record: PersonalRecord) -> some View {
-        HStack(spacing: 12) {
-            RegionBadge(region: record.region, size: 36)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(record.exerciseName)
-                    .font(.subheadline.weight(.semibold))
-                    .lineLimit(1)
-                Text(record.date.trDayMonth)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer(minLength: 8)
-
-            VStack(alignment: .trailing, spacing: 1) {
-                Text("\(formattedWeight(record.weight)) kg")
-                    .font(.subheadline.weight(.bold))
-                    .foregroundStyle(record.region?.tint ?? .accentColor)
-                Text("\(record.reps) tekrar")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 8)
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(.systemGroupedBackground))
-        )
-    }
-
     // MARK: - Row
 
     private func sessionRow(_ session: WorkoutSession) -> some View {
@@ -366,9 +271,7 @@ private struct WorkoutSessionDetailView: View {
     }
 
     private func exerciseCard(_ exercise: ExerciseEntry) -> some View {
-        let tint = exercise.region?.tint ?? .accentColor
-
-        return VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 13) {
                 RegionBadge(region: exercise.region)
 
@@ -388,9 +291,9 @@ private struct WorkoutSessionDetailView: View {
                     HStack(spacing: 10) {
                         Text("\(index + 1)")
                             .font(.caption.weight(.bold))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.secondary)
                             .frame(width: 24, height: 24)
-                            .background(Circle().fill(tint.gradient))
+                            .background(Circle().fill(Color(.tertiarySystemFill)))
 
                         Spacer(minLength: 0)
 

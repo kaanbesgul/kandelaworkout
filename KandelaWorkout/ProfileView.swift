@@ -2,10 +2,20 @@ import SwiftUI
 import SwiftData
 import Charts
 
+private struct PersonalRecord: Identifiable {
+    let id = UUID()
+    let exerciseName: String
+    let region: MuscleGroup?
+    let weight: Double
+    let reps: Int
+    let date: Date
+}
+
 struct ProfileView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var profiles: [UserProfile]
     @Query(sort: \WeightEntry.date, order: .reverse) private var weightEntries: [WeightEntry]
+    @Query(sort: \WorkoutSession.date, order: .reverse) private var sessions: [WorkoutSession]
 
     @State private var profile: UserProfile?
     @State private var weightInput = ""
@@ -21,6 +31,10 @@ struct ProfileView: View {
 
                     if let bmi = currentBMI {
                         bmiCard(bmi: bmi, category: BMICalculator.category(bmi: bmi))
+                    }
+
+                    if !personalRecords.isEmpty {
+                        recordsCard
                     }
                 }
                 .padding(16)
@@ -259,6 +273,85 @@ struct ProfileView: View {
         .cardStyle(padding: 16)
     }
 
+    // MARK: - Personal records
+
+    private var personalRecords: [PersonalRecord] {
+        var best: [String: PersonalRecord] = [:]
+
+        for session in sessions {
+            for exercise in session.exercises where exercise.measurement == .repsWeight {
+                for set in exercise.sets where set.weight > 0 {
+                    if best[exercise.name] == nil || set.weight > best[exercise.name]!.weight {
+                        best[exercise.name] = PersonalRecord(
+                            exerciseName: exercise.name,
+                            region: exercise.region,
+                            weight: set.weight,
+                            reps: set.reps,
+                            date: session.date
+                        )
+                    }
+                }
+            }
+        }
+
+        return best.values.sorted { $0.weight > $1.weight }
+    }
+
+    private var recordsCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 8) {
+                Image(systemName: "trophy.fill")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(.yellow)
+                Text("Kişisel Rekorların")
+                    .font(.subheadline.weight(.bold))
+                Spacer(minLength: 0)
+                Text("\(personalRecords.count)")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(.secondary)
+            }
+
+            VStack(spacing: 8) {
+                ForEach(personalRecords) { record in
+                    recordRow(record)
+                }
+            }
+        }
+        .cardStyle()
+    }
+
+    private func recordRow(_ record: PersonalRecord) -> some View {
+        HStack(spacing: 12) {
+            RegionBadge(region: record.region, size: 36)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(record.exerciseName)
+                    .font(.subheadline.weight(.semibold))
+                    .lineLimit(1)
+                Text(record.date.trDayMonth)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer(minLength: 8)
+
+            VStack(alignment: .trailing, spacing: 1) {
+                Text("\(formattedWeight(record.weight)) kg")
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(Color.accentColor)
+                Text("\(record.reps) tekrar")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(Color(.systemGroupedBackground))
+        )
+    }
+
     // MARK: - Logic
 
     @discardableResult
@@ -286,5 +379,8 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView()
-        .modelContainer(for: [UserProfile.self, WeightEntry.self], inMemory: true)
+        .modelContainer(
+            for: [UserProfile.self, WeightEntry.self, WorkoutSession.self, ExerciseEntry.self, SetEntry.self],
+            inMemory: true
+        )
 }

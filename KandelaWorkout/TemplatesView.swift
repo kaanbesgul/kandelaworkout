@@ -105,8 +105,8 @@ struct TemplatesView: View {
         HStack(spacing: 13) {
             ZStack {
                 Circle()
-                    .fill((template.program?.tint ?? .accentColor).gradient)
-                    .shadow(color: (template.program?.tint ?? .accentColor).opacity(0.35), radius: 6, x: 0, y: 3)
+                    .fill(Color.accentColor.gradient)
+                    .shadow(color: Color.accentColor.opacity(0.35), radius: 6, x: 0, y: 3)
                 Image(systemName: template.program?.icon ?? "list.bullet.clipboard.fill")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(.white)
@@ -251,8 +251,8 @@ private struct TemplateBuilderView: View {
             .background {
                 if isSelected {
                     Capsule()
-                        .fill(program.tint.gradient)
-                        .shadow(color: program.tint.opacity(0.45), radius: 8, x: 0, y: 4)
+                        .fill(Color.accentColor.gradient)
+                        .shadow(color: Color.accentColor.opacity(0.45), radius: 8, x: 0, y: 4)
                 } else {
                     Capsule()
                         .fill(Color(.tertiarySystemFill))
@@ -297,7 +297,6 @@ private struct TemplateBuilderView: View {
 
     private func slotRow(slot: Binding<DraftTemplateExercise>) -> some View {
         let region = slot.wrappedValue.exerciseName.flatMap { ExerciseLibrary.region(forExercise: $0) }
-        let tint = region?.tint ?? .accentColor
 
         return HStack(spacing: 10) {
             RegionBadge(region: region, size: 36)
@@ -323,11 +322,9 @@ private struct TemplateBuilderView: View {
             } label: {
                 PickerChip(
                     title: slot.wrappedValue.exerciseName ?? "Hareket Seç",
-                    isPlaceholder: slot.wrappedValue.exerciseName == nil,
-                    tint: tint
+                    isPlaceholder: slot.wrappedValue.exerciseName == nil
                 )
             }
-            .tint(tint)
 
             if slots.count > 1 {
                 Button {
