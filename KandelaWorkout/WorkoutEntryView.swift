@@ -69,7 +69,7 @@ struct WorkoutEntryView: View {
                 hideKeyboard()
             }
             .scrollDismissesKeyboard(.interactively)
-            .background(Color(.systemGroupedBackground))
+            .background(Theme.background)
             .navigationTitle("Antrenman")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -153,28 +153,40 @@ struct WorkoutEntryView: View {
         .padding(14)
         .background(
             RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(Color(.tertiarySystemFill).opacity(0.5))
+                .fill(Theme.fill.opacity(0.5))
         )
     }
 
     private func templateChip(_ template: WorkoutTemplate) -> some View {
-        Button {
+        let isActive = isTemplateActive(template)
+
+        return Button {
             applyTemplate(template)
         } label: {
             HStack(spacing: 6) {
-                Image(systemName: template.program?.icon ?? "list.bullet.clipboard.fill")
+                Image(systemName: isActive ? "checkmark.circle.fill" : (template.program?.icon ?? "list.bullet.clipboard.fill"))
                     .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(isActive ? .white : Color.secondary)
                 Text(template.name)
                     .font(.subheadline.weight(.semibold))
                 Text("\(template.exerciseNames.count)")
                     .font(.caption2.weight(.bold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(isActive ? .white.opacity(0.85) : Color.secondary)
             }
-            .foregroundStyle(.primary)
+            .foregroundStyle(isActive ? .white : .primary)
             .padding(.horizontal, 13)
             .padding(.vertical, 9)
-            .background(Capsule().fill(Color(.secondarySystemGroupedBackground)))
+            .background {
+                if isActive {
+                    Capsule()
+                        .fill(Color.accentColor.gradient)
+                        .shadow(color: Color.accentColor.opacity(0.4), radius: 8, x: 0, y: 4)
+                } else {
+                    Capsule()
+                        .fill(Theme.fillStrong)
+                        .overlay(Capsule().strokeBorder(Theme.border, lineWidth: 1))
+                }
+            }
         }
         .buttonStyle(.plain)
         .contextMenu {
@@ -188,17 +200,28 @@ struct WorkoutEntryView: View {
         }
     }
 
+    private func isTemplateActive(_ template: WorkoutTemplate) -> Bool {
+        exercises.map(\.exerciseName) == template.exerciseNames.map { Optional($0) }
+    }
+
     private func applyTemplate(_ template: WorkoutTemplate) {
-        withAnimation(.snappy) {
-            let newExercises = template.exerciseNames.map { name -> DraftExercise in
-                var draft = DraftExercise()
-                draft.exerciseName = name
-                return draft
+        if isTemplateActive(template) {
+            exercises = [DraftExercise()]
+            if template.program != nil, selectedProgram == template.program {
+                selectedProgram = nil
             }
-            exercises = newExercises.isEmpty ? [DraftExercise()] : newExercises
-            if let program = template.program {
-                selectedProgram = program
-            }
+            hideKeyboard()
+            return
+        }
+
+        let newExercises = template.exerciseNames.map { name -> DraftExercise in
+            var draft = DraftExercise()
+            draft.exerciseName = name
+            return draft
+        }
+        exercises = newExercises.isEmpty ? [DraftExercise()] : newExercises
+        if let program = template.program {
+            selectedProgram = program
         }
         hideKeyboard()
     }
@@ -230,6 +253,7 @@ struct WorkoutEntryView: View {
         return Button {
             withAnimation(.snappy) {
                 selectedProgram = isSelected ? nil : program
+                exercises = [DraftExercise()]
             }
         } label: {
             HStack(spacing: 6) {
@@ -248,7 +272,8 @@ struct WorkoutEntryView: View {
                         .shadow(color: Color.accentColor.opacity(0.45), radius: 8, x: 0, y: 4)
                 } else {
                     Capsule()
-                        .fill(Color(.tertiarySystemFill))
+                        .fill(Theme.fill)
+                        .overlay(Capsule().strokeBorder(Theme.fillStrong, lineWidth: 1))
                 }
             }
         }
@@ -306,6 +331,15 @@ struct WorkoutEntryView: View {
                             .font(.system(size: 11, weight: .bold))
                             .foregroundStyle(.secondary)
                     }
+                    .padding(10)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .fill(Theme.fill)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .strokeBorder(Theme.fillStrong, lineWidth: 1)
+                    )
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
@@ -320,7 +354,7 @@ struct WorkoutEntryView: View {
                             .font(.system(size: 11, weight: .bold))
                             .foregroundStyle(.secondary)
                             .frame(width: 26, height: 26)
-                            .background(Circle().fill(Color(.tertiarySystemFill)))
+                            .background(Circle().fill(Theme.fill))
                     }
                     .buttonStyle(.plain)
                 }
@@ -372,7 +406,7 @@ struct WorkoutEntryView: View {
                 .font(.footnote.weight(.bold))
                 .foregroundStyle(.secondary)
                 .frame(width: 28, height: 28)
-                .background(Circle().fill(Color(.tertiarySystemFill)))
+                .background(Circle().fill(Theme.fill))
 
             switch measurement {
             case .repsWeight:
@@ -399,14 +433,14 @@ struct WorkoutEntryView: View {
                     .font(.system(size: 11, weight: .bold))
                     .foregroundStyle(.secondary)
                     .frame(width: 26, height: 26)
-                    .background(Circle().fill(Color(.tertiarySystemFill)))
+                    .background(Circle().fill(Theme.fill))
             }
             .buttonStyle(.plain)
         }
         .padding(8)
         .background(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color(.systemGroupedBackground))
+                .fill(Theme.background)
         )
     }
 
@@ -420,11 +454,11 @@ struct WorkoutEntryView: View {
             .frame(maxWidth: .infinity)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color(.secondarySystemGroupedBackground))
+                    .fill(Theme.surface)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .strokeBorder(Color.primary.opacity(0.07), lineWidth: 1)
+                    .strokeBorder(Theme.border, lineWidth: 1)
             )
     }
 

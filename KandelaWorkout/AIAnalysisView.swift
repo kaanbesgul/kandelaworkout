@@ -150,7 +150,7 @@ struct AIAnalysisView: View {
             .contentShape(Rectangle())
             .onTapGesture { hideKeyboard() }
             .scrollDismissesKeyboard(.interactively)
-            .background(Color(.systemGroupedBackground))
+            .background(Theme.background)
             .navigationTitle("AI Koç")
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
@@ -307,7 +307,7 @@ struct AIAnalysisView: View {
                 .padding(.vertical, 11)
                 .background(
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .fill(Color(.tertiarySystemFill))
+                        .fill(Theme.fill)
                 )
 
             Button {
@@ -359,7 +359,7 @@ struct AIAnalysisView: View {
                             .font(.system(size: 12, weight: .bold))
                             .foregroundStyle(.secondary)
                             .frame(width: 28, height: 28)
-                            .background(Circle().fill(Color(.tertiarySystemFill)))
+                            .background(Circle().fill(Theme.fill))
                     }
                     .buttonStyle(.plain)
                 }
@@ -374,7 +374,7 @@ struct AIAnalysisView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(
                         RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(Color(.tertiarySystemFill))
+                            .fill(Theme.fill)
                     )
             }
 

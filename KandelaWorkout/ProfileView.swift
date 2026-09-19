@@ -42,7 +42,7 @@ struct ProfileView: View {
             .contentShape(Rectangle())
             .onTapGesture { hideKeyboard() }
             .scrollDismissesKeyboard(.interactively)
-            .background(Color(.systemGroupedBackground))
+            .background(Theme.background)
             .navigationTitle("Profil")
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
@@ -121,7 +121,7 @@ struct ProfileView: View {
                     .padding(.vertical, 11)
                     .background(
                         RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .fill(Color(.tertiarySystemFill))
+                            .fill(Theme.fill)
                     )
 
                 Button {
@@ -187,7 +187,7 @@ struct ProfileView: View {
         .chartXAxis {
             AxisMarks(values: .automatic(desiredCount: 4)) { _ in
                 AxisGridLine()
-                AxisValueLabel(format: .dateTime.day().month(.abbreviated))
+                AxisValueLabel(format: .dateTime.day().month(.abbreviated).locale(Locale(identifier: "tr_TR")))
             }
         }
         .chartYAxis {
@@ -243,7 +243,7 @@ struct ProfileView: View {
             .padding(.vertical, 12)
             .background(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color(.tertiarySystemFill))
+                    .fill(Theme.fill)
             )
             .onChange(of: heightText) { _, newValue in
                 ensureProfile().height = Double(newValue)
@@ -348,7 +348,7 @@ struct ProfileView: View {
         .padding(.vertical, 8)
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(.systemGroupedBackground))
+                .fill(Theme.background)
         )
     }
 

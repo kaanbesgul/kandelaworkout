@@ -41,7 +41,7 @@ struct HistoryView: View {
                     }
                     .listStyle(.plain)
                     .scrollContentBackground(.hidden)
-                    .background(Color(.systemGroupedBackground))
+                    .background(Theme.background)
                 }
             }
             .navigationTitle("Geçmiş")
@@ -74,7 +74,7 @@ struct HistoryView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemGroupedBackground))
+        .background(Theme.background)
     }
 
     // MARK: - Summary
@@ -146,7 +146,7 @@ struct HistoryView: View {
             .chartXAxis {
                 AxisMarks(values: .automatic(desiredCount: 3)) { _ in
                     AxisGridLine()
-                    AxisValueLabel(format: .dateTime.day().month(.abbreviated))
+                    AxisValueLabel(format: .dateTime.day().month(.abbreviated).locale(Locale(identifier: "tr_TR")))
                 }
             }
             .chartYAxis {
@@ -228,7 +228,7 @@ private struct WorkoutSessionDetailView: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(Theme.background)
         .navigationTitle(session.date.trDayMonth)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -293,7 +293,7 @@ private struct WorkoutSessionDetailView: View {
                             .font(.caption.weight(.bold))
                             .foregroundStyle(.secondary)
                             .frame(width: 24, height: 24)
-                            .background(Circle().fill(Color(.tertiarySystemFill)))
+                            .background(Circle().fill(Theme.fill))
 
                         Spacer(minLength: 0)
 
@@ -336,7 +336,7 @@ private struct WorkoutSessionDetailView: View {
                     .padding(.vertical, 8)
                     .background(
                         RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .fill(Color(.systemGroupedBackground))
+                            .fill(Theme.background)
                     )
                 }
             }

@@ -22,6 +22,7 @@
 		B6E807FC3C1F479514C24C1F /* RestTimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7A74B3329A9CBF92A64124 /* RestTimerService.swift */; };
 		2C7CCDEE4248A28F9CE0B3B6 /* RestTimerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17DB06E0D43444657965ADD /* RestTimerSheet.swift */; };
 		5CA9C6DACA13B65F52F6386B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF7DCFE9DD8301FEC36C07 /* ProfileView.swift */; };
+		EF9DC8BD3B62F76C434BFA04 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A314DC845B45E42B946B00A /* Theme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		1F7A74B3329A9CBF92A64124 /* RestTimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerService.swift; sourceTree = "<group>"; };
 		E17DB06E0D43444657965ADD /* RestTimerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerSheet.swift; sourceTree = "<group>"; };
 		D6AF7DCFE9DD8301FEC36C07 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		9A314DC845B45E42B946B00A /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 				1F7A74B3329A9CBF92A64124 /* RestTimerService.swift */,
 				E17DB06E0D43444657965ADD /* RestTimerSheet.swift */,
 				D6AF7DCFE9DD8301FEC36C07 /* ProfileView.swift */,
+				9A314DC845B45E42B946B00A /* Theme.swift */,
 				B2EF06D1BCD704BB11287845 /* Assets.xcassets */,
 			);
 			path = KandelaWorkout;
@@ -175,6 +178,7 @@
 				B6E807FC3C1F479514C24C1F /* RestTimerService.swift in Sources */,
 				2C7CCDEE4248A28F9CE0B3B6 /* RestTimerSheet.swift in Sources */,
 				5CA9C6DACA13B65F52F6386B /* ProfileView.swift in Sources */,
+				EF9DC8BD3B62F76C434BFA04 /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

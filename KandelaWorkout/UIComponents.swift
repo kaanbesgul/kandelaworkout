@@ -10,13 +10,13 @@ private struct CardBackground: ViewModifier {
             .padding(padding)
             .background(
                 RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .fill(Color(.secondarySystemGroupedBackground))
+                    .fill(Theme.surface)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .strokeBorder(Color.primary.opacity(0.05), lineWidth: 1)
+                    .strokeBorder(Theme.border, lineWidth: 1)
             )
-            .shadow(color: .black.opacity(0.06), radius: 14, x: 0, y: 6)
+            .shadow(color: .black.opacity(0.35), radius: 14, x: 0, y: 6)
     }
 }
 
@@ -158,7 +158,11 @@ struct PickerChip: View {
         .padding(.vertical, 7)
         .background(
             RoundedRectangle(cornerRadius: 15, style: .continuous)
-                .fill(Color(.tertiarySystemFill))
+                .fill(Theme.fill)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 15, style: .continuous)
+                .strokeBorder(Theme.fillStrong, lineWidth: 1)
         )
     }
 }

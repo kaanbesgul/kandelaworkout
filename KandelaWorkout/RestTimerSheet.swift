@@ -19,7 +19,7 @@ struct RestTimerSheet: View {
             }
             .padding(24)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.systemGroupedBackground))
+            .background(Theme.background)
             .navigationTitle("Dinlenme Sayacı")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -84,7 +84,7 @@ struct RestTimerSheet: View {
         VStack(spacing: 28) {
             ZStack {
                 Circle()
-                    .stroke(Color(.tertiarySystemFill), lineWidth: 14)
+                    .stroke(Theme.fill, lineWidth: 14)
 
                 Circle()
                     .trim(from: 0, to: restTimer.progress)
@@ -130,7 +130,7 @@ struct RestTimerSheet: View {
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 14)
-                            .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(Color(.tertiarySystemFill)))
+                            .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(Theme.fill))
                     }
                     .buttonStyle(.plain)
 

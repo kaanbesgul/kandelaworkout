@@ -28,6 +28,7 @@ struct ContentView: View {
                     Label("Profil", systemImage: "person.circle.fill")
                 }
         }
+        .preferredColorScheme(.dark)
     }
 }
 

@@ -42,7 +42,7 @@ struct TemplatesView: View {
                     }
                     .listStyle(.plain)
                     .scrollContentBackground(.hidden)
-                    .background(Color(.systemGroupedBackground))
+                    .background(Theme.background)
                 }
             }
             .navigationTitle("Şablonlar")
@@ -98,7 +98,7 @@ struct TemplatesView: View {
             .buttonStyle(.plain)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemGroupedBackground))
+        .background(Theme.background)
     }
 
     private func templateRow(_ template: WorkoutTemplate) -> some View {
@@ -182,7 +182,7 @@ private struct TemplateBuilderView: View {
             .contentShape(Rectangle())
             .onTapGesture { hideKeyboard() }
             .scrollDismissesKeyboard(.interactively)
-            .background(Color(.systemGroupedBackground))
+            .background(Theme.background)
             .navigationTitle(existingTemplate == nil ? "Yeni Şablon" : "Şablonu Düzenle")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -212,7 +212,7 @@ private struct TemplateBuilderView: View {
                 .padding(.vertical, 11)
                 .background(
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .fill(Color(.tertiarySystemFill))
+                        .fill(Theme.fill)
                 )
         }
         .cardStyle()
@@ -255,7 +255,8 @@ private struct TemplateBuilderView: View {
                         .shadow(color: Color.accentColor.opacity(0.45), radius: 8, x: 0, y: 4)
                 } else {
                     Capsule()
-                        .fill(Color(.tertiarySystemFill))
+                        .fill(Theme.fill)
+                        .overlay(Capsule().strokeBorder(Theme.fillStrong, lineWidth: 1))
                 }
             }
         }
@@ -336,7 +337,7 @@ private struct TemplateBuilderView: View {
                         .font(.system(size: 11, weight: .bold))
                         .foregroundStyle(.secondary)
                         .frame(width: 26, height: 26)
-                        .background(Circle().fill(Color(.tertiarySystemFill)))
+                        .background(Circle().fill(Theme.fill))
                 }
                 .buttonStyle(.plain)
             }
