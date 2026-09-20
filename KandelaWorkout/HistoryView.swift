@@ -6,6 +6,7 @@ struct HistoryView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \WorkoutSession.date, order: .reverse) private var sessions: [WorkoutSession]
     @State private var selectedSession: WorkoutSession?
+    @State private var showPastWorkoutEntry = false
 
     var body: some View {
         NavigationStack {
@@ -45,8 +46,21 @@ struct HistoryView: View {
                 }
             }
             .navigationTitle("Geçmiş")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showPastWorkoutEntry = true
+                    } label: {
+                        Image(systemName: "plus")
+                            .font(.system(size: 16, weight: .bold))
+                    }
+                }
+            }
             .navigationDestination(item: $selectedSession) { session in
                 WorkoutSessionDetailView(session: session)
+            }
+            .sheet(isPresented: $showPastWorkoutEntry) {
+                PastWorkoutEntryView()
             }
         }
     }
@@ -185,7 +199,9 @@ struct HistoryView: View {
                     if session.totalVolume > 0 {
                         MetricPill(icon: "scalemass.fill", text: "\(formattedWeight(session.totalVolume)) kg", tint: .green)
                     }
-                    if session.totalDurationMinutes > 0 {
+                    if let duration = session.workoutDurationMinutes, duration > 0 {
+                        MetricPill(icon: "stopwatch.fill", text: "\(duration) dk", tint: .teal)
+                    } else if session.totalDurationMinutes > 0 {
                         MetricPill(icon: "clock.fill", text: "\(session.totalDurationMinutes) dk", tint: .teal)
                     }
                 }
@@ -239,9 +255,14 @@ private struct WorkoutSessionDetailView: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(session.date.trDayMonthWeekday)
                         .font(.headline)
-                    Text(session.date.trTime)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 4) {
+                        Text(session.date.trTime)
+                        if let duration = session.workoutDurationMinutes, duration > 0 {
+                            Text("· \(duration) dk sürdü")
+                        }
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
                 }
                 Spacer(minLength: 0)
                 if let program = session.program {
@@ -262,6 +283,8 @@ private struct WorkoutSessionDetailView: View {
 
                 if session.totalVolume > 0 {
                     StatTile(value: formattedWeight(session.totalVolume), label: "Toplam Kg", tint: .green)
+                } else if let duration = session.workoutDurationMinutes, duration > 0 {
+                    StatTile(value: "\(duration)", label: "Dakika", tint: .teal)
                 } else {
                     StatTile(value: "\(session.totalDurationMinutes)", label: "Dakika", tint: .teal)
                 }

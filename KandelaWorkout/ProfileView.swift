@@ -20,6 +20,10 @@ struct ProfileView: View {
     @State private var profile: UserProfile?
     @State private var weightInput = ""
     @State private var heightText = ""
+    @State private var autoRestTimerEnabled = false
+    @State private var autoRestTimerMinutes = 3
+
+    private let restTimerMinuteOptions = [1, 2, 3, 5]
 
     var body: some View {
         NavigationStack {
@@ -28,6 +32,7 @@ struct ProfileView: View {
                     introCard
                     weightCard
                     heightCard
+                    restTimerSettingsCard
 
                     if let bmi = currentBMI {
                         bmiCard(bmi: bmi, category: BMICalculator.category(bmi: bmi))
@@ -252,6 +257,63 @@ struct ProfileView: View {
         .cardStyle()
     }
 
+    // MARK: - Rest timer settings
+
+    private var restTimerSettingsCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            StepHeader(number: 3, title: "Otomatik dinlenme sayacı")
+
+            Toggle(isOn: $autoRestTimerEnabled) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Set eklerken otomatik başlat")
+                        .font(.subheadline.weight(.semibold))
+                    Text("Bir harekete yeni set eklediğinde sayaç kendiliğinden başlar.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .tint(Color.accentColor)
+            .onChange(of: autoRestTimerEnabled) { _, newValue in
+                ensureProfile().autoRestTimerEnabled = newValue
+            }
+
+            if autoRestTimerEnabled {
+                HStack(spacing: 8) {
+                    ForEach(restTimerMinuteOptions, id: \.self) { minutes in
+                        restTimerMinuteChip(minutes)
+                    }
+                }
+            }
+        }
+        .cardStyle()
+    }
+
+    private func restTimerMinuteChip(_ minutes: Int) -> some View {
+        let isSelected = autoRestTimerMinutes == minutes
+
+        return Button {
+            autoRestTimerMinutes = minutes
+            ensureProfile().autoRestTimerMinutes = minutes
+        } label: {
+            Text("\(minutes) dk")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(isSelected ? .white : .primary)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .frame(maxWidth: .infinity)
+                .background {
+                    if isSelected {
+                        Capsule().fill(Color.accentColor.gradient)
+                    } else {
+                        Capsule()
+                            .fill(Theme.fill)
+                            .overlay(Capsule().strokeBorder(Theme.fillStrong, lineWidth: 1))
+                    }
+                }
+        }
+        .buttonStyle(.plain)
+    }
+
     // MARK: - BMI
 
     private func bmiCard(bmi: Double, category: String) -> some View {
@@ -370,6 +432,8 @@ struct ProfileView: View {
     private func loadInitialValues() {
         let current = ensureProfile()
         heightText = current.height.map { String(Int($0)) } ?? ""
+        autoRestTimerEnabled = current.autoRestTimerEnabled
+        autoRestTimerMinutes = current.autoRestTimerMinutes
     }
 
     private func hideKeyboard() {

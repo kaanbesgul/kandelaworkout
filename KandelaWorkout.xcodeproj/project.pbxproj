@@ -23,6 +23,8 @@
 		2C7CCDEE4248A28F9CE0B3B6 /* RestTimerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17DB06E0D43444657965ADD /* RestTimerSheet.swift */; };
 		5CA9C6DACA13B65F52F6386B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF7DCFE9DD8301FEC36C07 /* ProfileView.swift */; };
 		EF9DC8BD3B62F76C434BFA04 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A314DC845B45E42B946B00A /* Theme.swift */; };
+		D21195CB16214F0834ADA088 /* ExercisesEditorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62D047354B879CEB7111B05 /* ExercisesEditorSection.swift */; };
+		0392E785C5AC3343857874D5 /* PastWorkoutEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4151B5CD5EA19977AFD529DD /* PastWorkoutEntryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +45,8 @@
 		E17DB06E0D43444657965ADD /* RestTimerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerSheet.swift; sourceTree = "<group>"; };
 		D6AF7DCFE9DD8301FEC36C07 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		9A314DC845B45E42B946B00A /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		B62D047354B879CEB7111B05 /* ExercisesEditorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesEditorSection.swift; sourceTree = "<group>"; };
+		4151B5CD5EA19977AFD529DD /* PastWorkoutEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastWorkoutEntryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +78,8 @@
 				E17DB06E0D43444657965ADD /* RestTimerSheet.swift */,
 				D6AF7DCFE9DD8301FEC36C07 /* ProfileView.swift */,
 				9A314DC845B45E42B946B00A /* Theme.swift */,
+				B62D047354B879CEB7111B05 /* ExercisesEditorSection.swift */,
+				4151B5CD5EA19977AFD529DD /* PastWorkoutEntryView.swift */,
 				B2EF06D1BCD704BB11287845 /* Assets.xcassets */,
 			);
 			path = KandelaWorkout;
@@ -179,6 +185,8 @@
 				2C7CCDEE4248A28F9CE0B3B6 /* RestTimerSheet.swift in Sources */,
 				5CA9C6DACA13B65F52F6386B /* ProfileView.swift in Sources */,
 				EF9DC8BD3B62F76C434BFA04 /* Theme.swift in Sources */,
+				D21195CB16214F0834ADA088 /* ExercisesEditorSection.swift in Sources */,
+				0392E785C5AC3343857874D5 /* PastWorkoutEntryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

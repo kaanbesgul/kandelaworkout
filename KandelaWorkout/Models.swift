@@ -5,13 +5,20 @@ import SwiftData
 final class WorkoutSession {
     var date: Date
     var programRawValue: String?
+    var workoutDurationMinutes: Int?
     @Relationship(deleteRule: .cascade, inverse: \ExerciseEntry.session)
     var exercises: [ExerciseEntry]
 
-    init(date: Date = .now, program: WorkoutProgram? = nil, exercises: [ExerciseEntry] = []) {
+    init(
+        date: Date = .now,
+        program: WorkoutProgram? = nil,
+        exercises: [ExerciseEntry] = [],
+        durationMinutes: Int? = nil
+    ) {
         self.date = date
         self.programRawValue = program?.rawValue
         self.exercises = exercises
+        self.workoutDurationMinutes = durationMinutes
     }
 
     var program: WorkoutProgram? {
@@ -80,9 +87,13 @@ final class WorkoutTemplate {
 @Model
 final class UserProfile {
     var height: Double?
+    var autoRestTimerEnabled: Bool = false
+    var autoRestTimerMinutes: Int = 3
 
-    init(height: Double? = nil) {
+    init(height: Double? = nil, autoRestTimerEnabled: Bool = false, autoRestTimerMinutes: Int = 3) {
         self.height = height
+        self.autoRestTimerEnabled = autoRestTimerEnabled
+        self.autoRestTimerMinutes = autoRestTimerMinutes
     }
 }
 
