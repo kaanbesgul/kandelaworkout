@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(RestTimerService.self) private var restTimer
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some View {
         TabView {
             WorkoutEntryView()
@@ -29,9 +32,15 @@ struct ContentView: View {
                 }
         }
         .preferredColorScheme(.dark)
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                restTimer.refresh()
+            }
+        }
     }
 }
 
 #Preview {
     ContentView()
+        .environment(RestTimerService())
 }

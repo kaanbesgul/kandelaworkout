@@ -395,6 +395,7 @@ struct WorkoutEntryView: View {
     }
 
     private func startAutoRestTimerIfNeeded() {
+        guard !restTimer.isRunning else { return }
         guard let profile = profiles.first, profile.autoRestTimerEnabled else { return }
         restTimer.start(minutes: profile.autoRestTimerMinutes)
     }
