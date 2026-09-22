@@ -14,6 +14,7 @@ struct WorkoutEntryView: View {
     @State private var isWorkoutActive = false
     @State private var sessionStartDate: Date?
     @State private var finishedDurationMinutes: Int?
+    @State private var didLoadDraft = false
 
     var body: some View {
         NavigationStack {
@@ -83,6 +84,12 @@ struct WorkoutEntryView: View {
             } message: {
                 Text("Geçmiş sekmesinden görüntüleyebilirsin.")
             }
+            .onAppear(perform: loadDraftIfNeeded)
+            .onChange(of: exercises) { _, _ in saveDraft() }
+            .onChange(of: selectedProgram) { _, _ in saveDraft() }
+            .onChange(of: isWorkoutActive) { _, _ in saveDraft() }
+            .onChange(of: sessionStartDate) { _, _ in saveDraft() }
+            .onChange(of: finishedDurationMinutes) { _, _ in saveDraft() }
         }
     }
 
@@ -394,6 +401,65 @@ struct WorkoutEntryView: View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 
+    // MARK: - Draft persistence
+
+    private struct WorkoutDraft: Codable {
+        var exercises: [DraftExercise]
+        var selectedProgramRawValue: String?
+        var isWorkoutActive: Bool
+        var sessionStartDate: Date?
+        var finishedDurationMinutes: Int?
+    }
+
+    private static let draftDefaultsKey = "workoutEntry.draft"
+
+    private func loadDraftIfNeeded() {
+        guard !didLoadDraft else { return }
+        didLoadDraft = true
+
+        guard
+            let data = UserDefaults.standard.data(forKey: Self.draftDefaultsKey),
+            let draft = try? JSONDecoder().decode(WorkoutDraft.self, from: data)
+        else { return }
+
+        exercises = draft.exercises.isEmpty ? [DraftExercise()] : draft.exercises
+        selectedProgram = draft.selectedProgramRawValue.flatMap { WorkoutProgram(rawValue: $0) }
+        isWorkoutActive = draft.isWorkoutActive
+        sessionStartDate = draft.sessionStartDate
+        finishedDurationMinutes = draft.finishedDurationMinutes
+    }
+
+    private func saveDraft() {
+        guard didLoadDraft else { return }
+
+        let isEmpty = exercises.count <= 1
+            && exercises.allSatisfy { $0.exerciseName == nil && $0.sets.allSatisfy { $0.reps.isEmpty && $0.weight.isEmpty && $0.duration.isEmpty } }
+            && selectedProgram == nil
+            && !isWorkoutActive
+            && finishedDurationMinutes == nil
+
+        guard !isEmpty else {
+            clearDraft()
+            return
+        }
+
+        let draft = WorkoutDraft(
+            exercises: exercises,
+            selectedProgramRawValue: selectedProgram?.rawValue,
+            isWorkoutActive: isWorkoutActive,
+            sessionStartDate: sessionStartDate,
+            finishedDurationMinutes: finishedDurationMinutes
+        )
+
+        if let data = try? JSONEncoder().encode(draft) {
+            UserDefaults.standard.set(data, forKey: Self.draftDefaultsKey)
+        }
+    }
+
+    private func clearDraft() {
+        UserDefaults.standard.removeObject(forKey: Self.draftDefaultsKey)
+    }
+
     private func startAutoRestTimerIfNeeded() {
         guard !restTimer.isRunning else { return }
         guard let profile = profiles.first, profile.autoRestTimerEnabled else { return }
@@ -429,6 +495,7 @@ struct WorkoutEntryView: View {
         isWorkoutActive = false
         sessionStartDate = nil
         finishedDurationMinutes = nil
+        clearDraft()
         didSave = true
     }
 }

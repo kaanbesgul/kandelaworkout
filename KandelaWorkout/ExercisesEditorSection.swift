@@ -1,14 +1,14 @@
 import SwiftUI
 
-struct DraftSet: Identifiable {
-    let id = UUID()
+struct DraftSet: Identifiable, Codable, Equatable {
+    var id = UUID()
     var reps: String = ""
     var weight: String = ""
     var duration: String = ""
 }
 
-struct DraftExercise: Identifiable {
-    let id = UUID()
+struct DraftExercise: Identifiable, Codable, Equatable {
+    var id = UUID()
     var exerciseName: String?
     var sets: [DraftSet] = [DraftSet()]
 
