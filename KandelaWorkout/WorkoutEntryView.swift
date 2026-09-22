@@ -95,35 +95,50 @@ struct WorkoutEntryView: View {
 
     // MARK: - Workout timer
 
+    /// Workout sessions realistically don't run longer than this — used both to flag a
+    /// probably-forgotten timer in the UI and to cap what actually gets saved.
+    private static let maxReasonableWorkoutMinutes = 240
+    private static let forgottenWarningSeconds = 3 * 60 * 60
+
     private var workoutTimerCard: some View {
         Group {
             if isWorkoutActive, let start = sessionStartDate {
                 TimelineView(.periodic(from: start, by: 1)) { context in
                     let elapsed = max(0, Int(context.date.timeIntervalSince(start)))
+                    let isProbablyForgotten = elapsed >= Self.forgottenWarningSeconds
+                    let tint = isProbablyForgotten ? Color.orange : Color.accentColor
 
-                    HStack(spacing: 12) {
-                        HStack(spacing: 6) {
-                            Image(systemName: "stopwatch.fill")
-                                .font(.system(size: 12, weight: .bold))
-                            Text(formattedElapsed(elapsed))
-                                .font(.subheadline.weight(.bold))
-                                .monospacedDigit()
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(spacing: 12) {
+                            HStack(spacing: 6) {
+                                Image(systemName: isProbablyForgotten ? "exclamationmark.triangle.fill" : "stopwatch.fill")
+                                    .font(.system(size: 12, weight: .bold))
+                                Text(formattedElapsed(elapsed))
+                                    .font(.subheadline.weight(.bold))
+                                    .monospacedDigit()
+                            }
+                            .foregroundStyle(tint)
+
+                            Spacer(minLength: 0)
+
+                            Button {
+                                finishWorkout()
+                            } label: {
+                                Text("Antrenman Bitti")
+                                    .font(.caption.weight(.bold))
+                                    .foregroundStyle(.white)
+                                    .padding(.horizontal, 14)
+                                    .padding(.vertical, 9)
+                                    .background(Capsule().fill(Color.red.gradient))
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .foregroundStyle(Color.accentColor)
 
-                        Spacer(minLength: 0)
-
-                        Button {
-                            finishWorkout()
-                        } label: {
-                            Text("Antrenman Bitti")
-                                .font(.caption.weight(.bold))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 9)
-                                .background(Capsule().fill(Color.red.gradient))
+                        if isProbablyForgotten {
+                            Text("Uzun süredir açık kalmış — antrenmanı unuttun mu? Süre en fazla \(Self.maxReasonableWorkoutMinutes / 60) saat olarak kaydedilecek.")
+                                .font(.caption2)
+                                .foregroundStyle(.orange)
                         }
-                        .buttonStyle(.plain)
                     }
                     .padding(.horizontal, 14)
                     .padding(.vertical, 10)
@@ -133,7 +148,7 @@ struct WorkoutEntryView: View {
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .strokeBorder(Theme.fillStrong, lineWidth: 1)
+                            .strokeBorder(isProbablyForgotten ? Color.orange.opacity(0.6) : Theme.fillStrong, lineWidth: 1)
                     )
                 }
             } else {
@@ -175,7 +190,13 @@ struct WorkoutEntryView: View {
     }
 
     private func formattedElapsed(_ seconds: Int) -> String {
-        String(format: "%d:%02d", seconds / 60, seconds % 60)
+        let hours = seconds / 3600
+        let minutes = (seconds % 3600) / 60
+        let secs = seconds % 60
+        if hours > 0 {
+            return String(format: "%d:%02d:%02d", hours, minutes, secs)
+        }
+        return String(format: "%d:%02d", minutes, secs)
     }
 
     private func startWorkout() {
@@ -186,7 +207,8 @@ struct WorkoutEntryView: View {
 
     private func finishWorkout() {
         guard let start = sessionStartDate else { return }
-        finishedDurationMinutes = max(0, Int(Date().timeIntervalSince(start) / 60))
+        let elapsedMinutes = max(0, Int(Date().timeIntervalSince(start) / 60))
+        finishedDurationMinutes = min(elapsedMinutes, Self.maxReasonableWorkoutMinutes)
         isWorkoutActive = false
     }
 
@@ -474,7 +496,8 @@ struct WorkoutEntryView: View {
         let durationMinutes: Int? = {
             if let finishedDurationMinutes { return finishedDurationMinutes }
             if isWorkoutActive, let start = sessionStartDate {
-                return max(0, Int(Date().timeIntervalSince(start) / 60))
+                let elapsedMinutes = max(0, Int(Date().timeIntervalSince(start) / 60))
+                return min(elapsedMinutes, Self.maxReasonableWorkoutMinutes)
             }
             return nil
         }()
